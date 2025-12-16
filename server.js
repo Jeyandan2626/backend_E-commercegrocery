@@ -18,7 +18,28 @@ connectDB();
 // Middleware
 // Configure CORS for production and development
 const corsOptions = {
-  origin: true, // Allow all origins during development
+  origin: function (origin, callback) {
+    // Allow requests with no origin (mobile apps, Postman, etc.)
+    if (!origin) return callback(null, true);
+    
+    // Allow all localhost ports for development
+    if (origin.startsWith('http://localhost:')) {
+      return callback(null, true);
+    }
+    
+    // Allow specific production domains
+    const allowedDomains = [
+      'https://freshmart-frontend.netlify.app',
+      'https://freshmart-grocery.vercel.app',
+      process.env.FRONTEND_URL
+    ].filter(Boolean);
+    
+    if (allowedDomains.includes(origin)) {
+      return callback(null, true);
+    }
+    
+    callback(new Error('Not allowed by CORS'));
+  },
   credentials: true,
   optionsSuccessStatus: 200,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
