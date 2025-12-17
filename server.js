@@ -5,6 +5,7 @@ const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const contactRoutes = require('./routes/contactRoutes');
 const productRoutes = require('./routes/productRoutes');
+const orderRoutes = require('./routes/orderRoutes');
 
 // Load environment variables
 dotenv.config();
@@ -31,6 +32,7 @@ const corsOptions = {
     const allowedDomains = [
       'https://freshmart-frontend.netlify.app',
       'https://freshmart-grocery.vercel.app',
+      'https://freshmartjey.netlify.app',
       process.env.FRONTEND_URL
     ].filter(Boolean);
     
@@ -53,6 +55,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/auth', authRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/products', productRoutes);
+app.use('/api/orders', orderRoutes);
 
 // Root route
 app.get('/', (req, res) => {
@@ -68,6 +71,8 @@ app.get('/', (req, res) => {
       createProduct: 'POST /api/products (Admin only)',
       updateProduct: 'PUT /api/products/:id (Admin only)',
       deleteProduct: 'DELETE /api/products/:id (Admin only)',
+      createOrder: 'POST /api/orders',
+      getOrders: 'GET /api/orders',
     },
   });
 });
